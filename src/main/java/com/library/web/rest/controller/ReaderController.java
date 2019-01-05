@@ -43,7 +43,7 @@ public class ReaderController {
     }
 
     @PutMapping(value = "returnBook", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ReaderDto returnBook(@RequestParam String readerId, @RequestParam String bookId, @RequestParam long quantity)  {
+    public ReaderDto returnBook(@RequestParam String readerId, @RequestParam String bookId, @RequestParam long quantity) throws BookException  {
         ReaderDto readerDto = mapper.mapToReaderDto(service.getReaderByReaderId(readerId));
 
         return service.returnBook(readerDto, bookId, quantity);

@@ -41,21 +41,21 @@ public class BookController {
         return result;
     }
 
-    @PutMapping(value = "/copy/{bookId}/quantity/{quantity}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "/copy/{bookId}/qty/{quantity}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public BookDto addBookCopy(@PathVariable String bookId, @PathVariable long quantity) {
         BookDto result = bookMapper.mapToBookDto(bookService.getBookByBookId(bookId));
 
         return bookService.addBookCopy(result, quantity);
     }
 
-    @PutMapping(value = "/destroyed/{bookId}/quantity/{quantity}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "/destroyed/{bookId}/qty/{quantity}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public BookDto destroyBook(@PathVariable String bookId, @PathVariable long quantity) {
         BookDto result = bookMapper.mapToBookDto(bookService.getBookByBookId(bookId));
 
         return bookService.markAsDestroyed(result, quantity);
     }
 
-    @PutMapping(value = "/lost/{bookId}/quantity/{quantity}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "/lost/{bookId}/qty/{quantity}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public BookDto lostBook(@PathVariable String bookId, @PathVariable long quantity) {
         BookDto bookDto = bookMapper.mapToBookDto(bookService.getBookByBookId(bookId));
         String result = bookDto.getBookId();

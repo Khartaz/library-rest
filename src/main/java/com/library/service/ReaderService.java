@@ -17,6 +17,7 @@ import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -72,27 +73,18 @@ public class ReaderService {
     }
 
     public boolean checkRentStatus(String bookId, String readerId) {
-           List<RentedBook> books = rentedBookRepository.findRentedBooksByReaderIdAndBookId(readerId, bookId);
+        List<RentedBook> books = rentedBookRepository.findRentedBooksByReaderIdAndBookId(readerId, bookId);
 
-           boolean status = books.stream().anyMatch(v -> !v.isReturned());
-           try {
-               if (status) {
-                   throw new BookException(BookMessages.RENT_FIRST.getErrorMessage());
-               }
-               return true;
-           } catch (BookException e) {
-               //
-           }
-           return false;
+        return books.stream().anyMatch(RentedBook::isReturned);
     }
 
 
     public ReaderDto rentBook(BookDto bookDto, ReaderDto readerDto, long quantity) throws BookException {
         Reader reader = getReaderByReaderId(readerDto.getReaderId());
 
-        boolean s = checkRentStatus(bookDto.getBookId(), reader.getReaderId());
-        if (!s) {
-            throw new BookException(BookMessages.RENT_FIRST.getErrorMessage());
+        boolean isReturned = checkRentStatus(bookDto.getBookId(), reader.getReaderId());
+        if (!isReturned) {
+            throw new BookException(BookMessages.BOOK_RENTED.getErrorMessage());
         }
 
         Book book = bookService.markAsRented(bookDto, quantity);
@@ -118,14 +110,20 @@ public class ReaderService {
     }
 
     @SuppressWarnings("Duplicates")
-    public ReaderDto returnBook(ReaderDto readerDto, String bookId, long quantity) throws NullPointerException {
+    public ReaderDto returnBook(ReaderDto readerDto, String bookId, long quantity) throws BookException {
         Reader reader = getReaderByReaderId(readerDto.getReaderId());
+
+        boolean isReturned = checkRentStatus(bookId, reader.getReaderId());
+        if (isReturned) {
+            throw new BookException(BookMessages.RENT_FIRST.getErrorMessage());
+        }
 
         String readerId = reader.getReaderId();
 
         RentedBook rentedBook = rentedBookRepository.findRentedBookByReaderIdAndBookId(readerId, bookId);
 
-        long booksInStock = rentedBook.getNumberOfBooks();
+
+        long booksInStock = Optional.of(rentedBook.getNumberOfBooks()).orElseThrow(NullPointerException::new);
 
         if(booksInStock > quantity) {
             long booksLost = booksInStock - quantity;
