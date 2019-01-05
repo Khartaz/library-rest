@@ -1,7 +1,7 @@
 package com.library.mapper;
 
 import com.library.domain.Reader;
-import com.library.domain.RentedBook;
+import com.library.domain.RentBook;
 import com.library.domain.dto.ReaderDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -11,11 +11,11 @@ import java.util.stream.Collectors;
 
 @Component
 public class ReaderMapper {
-    private RentedBookMapper rentedBookMapper;
+    private RentBookMapper rentBookMapper;
 
     @Autowired
-    public ReaderMapper(RentedBookMapper rentedBookMapper) {
-        this.rentedBookMapper = rentedBookMapper;
+    public ReaderMapper(RentBookMapper rentBookMapper) {
+        this.rentBookMapper = rentBookMapper;
     }
 
     public Reader mapToReader(ReaderDto readerDto) {
@@ -33,16 +33,16 @@ public class ReaderMapper {
                 reader.getFirstname(),
                 reader.getLastname(),
                 reader.getCreated(),
-                reader.getRentedBooks()
+                reader.getRentBooks()
                     .stream()
-                    .map(v -> rentedBookMapper.mapToRentedBookDto(v))
+                    .map(v -> rentBookMapper.mapToRentedBookDto(v))
                     .collect(Collectors.toList()));
     }
 
 
-    public Reader mapToReader(ReaderDto readerDto, List<RentedBook> list) {
+    public Reader mapToReader(ReaderDto readerDto, List<RentBook> list) {
         Reader reader = mapToReader(readerDto);
-        reader.setRentedBooks(list);
+        reader.setRentBooks(list);
 
         return reader;
     }

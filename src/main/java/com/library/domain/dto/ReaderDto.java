@@ -10,7 +10,7 @@ public class ReaderDto {
     private String firstname;
     private String lastname;
     private Date created;
-    private List<RentedBookDto> rentedBooks = new ArrayList<>();
+    private List<RentBookDto> rentedBooks = new ArrayList<>();
 
     public ReaderDto() {
     }
@@ -22,7 +22,7 @@ public class ReaderDto {
         this.created = created;
     }
 
-    public ReaderDto(String readerId, String firstname, String lastname, Date created, List<RentedBookDto> rentedBooks) {
+    public ReaderDto(String readerId, String firstname, String lastname, Date created, List<RentBookDto> rentedBooks) {
         this.readerId = readerId;
         this.firstname = firstname;
         this.lastname = lastname;
@@ -70,11 +70,11 @@ public class ReaderDto {
         this.created = created;
     }
 
-    public List<RentedBookDto> getRentedBooks() {
+    public List<RentBookDto> getRentedBooks() {
         return rentedBooks;
     }
 
-    public void setRentedBooks(List<RentedBookDto> rentedBooks) {
+    public void setRentedBooks(List<RentBookDto> rentedBooks) {
         this.rentedBooks = rentedBooks;
     }
 }

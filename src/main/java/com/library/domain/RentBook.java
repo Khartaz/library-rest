@@ -4,8 +4,8 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-@Table(name = "rented_books")
-public class RentedBook {
+@Table(name = "rent_books")
+public class RentBook {
     @Id
     @GeneratedValue
     @Column(name = "id")
@@ -32,10 +32,11 @@ public class RentedBook {
     @Column(name = "date_of_return")
     private Date dateOfReturnBook = null;
 
-    public RentedBook() {
+    public RentBook() {
     }
 
-    public RentedBook(String bookId, String readerId, Date rentDate, Date returnDate, long numberOfBooks, boolean returned, Date dateOfReturnBook) {
+    public RentBook(String bookId, String readerId, Date rentDate, Date returnDate,
+                    long numberOfBooks, boolean returned, Date dateOfReturnBook) {
         this.bookId = bookId;
         this.readerId = readerId;
         this.rentDate = rentDate;
@@ -45,7 +46,7 @@ public class RentedBook {
         this.dateOfReturnBook = dateOfReturnBook;
     }
 
-    public RentedBook(Date rentDate, Date returnDate) {
+    public RentBook(Date rentDate, Date returnDate) {
         this.rentDate = rentDate;
         this.returnDate = returnDate;
     }
@@ -116,7 +117,7 @@ public class RentedBook {
 
     @Override
     public String toString() {
-        return "RentedBook{" +
+        return "RentBook{" +
                 "id=" + id +
                 ", bookId='" + bookId + '\'' +
                 ", readerId='" + readerId + '\'' +

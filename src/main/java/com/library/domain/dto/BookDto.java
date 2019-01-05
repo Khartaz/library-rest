@@ -9,7 +9,7 @@ public class BookDto {
     private String title;
     private String author;
     private Date yearOfPublication;
-    private List<BookCopiesDto> bookCopies = new ArrayList<>();
+    private List<BookStockDto> bookCopies = new ArrayList<>();
 
     public BookDto() {
     }
@@ -22,7 +22,7 @@ public class BookDto {
         this.yearOfPublication = yearOfPublication;
     }
 
-    public BookDto(String bookId, String title, String author, Date yearOfPublication, List<BookCopiesDto> bookCopies) {
+    public BookDto(String bookId, String title, String author, Date yearOfPublication, List<BookStockDto> bookCopies) {
         this.bookId = bookId;
         this.title = title;
         this.author = author;
@@ -62,11 +62,11 @@ public class BookDto {
         this.yearOfPublication = yearOfPublication;
     }
 
-    public List<BookCopiesDto> getBookCopies() {
+    public List<BookStockDto> getBookCopies() {
         return bookCopies;
     }
 
-    public void setBookCopies(List<BookCopiesDto> bookCopies) {
+    public void setBookCopies(List<BookStockDto> bookCopies) {
         this.bookCopies = bookCopies;
     }
 }

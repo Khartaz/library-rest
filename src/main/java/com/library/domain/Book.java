@@ -26,7 +26,7 @@ public class Book {
     private Date yearOfPublication;
 
     @OneToMany(cascade = CascadeType.ALL)
-    private List<BookCopies> bookCopies = new ArrayList<>();
+    private List<BookStock> bookStock = new ArrayList<>();
 
     public Book() {
     }
@@ -85,12 +85,12 @@ public class Book {
         this.yearOfPublication = yearOfPublication;
     }
 
-    public List<BookCopies> getBookCopies() {
-        return bookCopies;
+    public List<BookStock> getBookStock() {
+        return bookStock;
     }
 
-    public void setBookCopies(List<BookCopies> bookCopies) {
-        this.bookCopies = bookCopies;
+    public void setBookStock(List<BookStock> bookStock) {
+        this.bookStock = bookStock;
     }
 
     @Override
@@ -101,7 +101,7 @@ public class Book {
                 ", title='" + title + '\'' +
                 ", author='" + author + '\'' +
                 ", yearOfPublication=" + yearOfPublication +
-                ", bookCopies=" + bookCopies +
+                ", bookStock=" + bookStock +
                 '}';
     }
 

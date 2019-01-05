@@ -3,8 +3,8 @@ package com.library.domain;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "bookCopies")
-public class BookCopies {
+@Table(name = "book_stock")
+public class BookStock {
     @Id
     @GeneratedValue
     @Column(name = "id")
@@ -31,10 +31,10 @@ public class BookCopies {
     @Column(name = "lost")
     private long lost;
 
-    public BookCopies() {
+    public BookStock() {
     }
 
-    public BookCopies(long total, long remainedToRent, long rented, long destroyed, long lost) {
+    public BookStock(long total, long remainedToRent, long rented, long destroyed, long lost) {
         this.total = total;
         this.remainedToRent = remainedToRent;
         this.rented = rented;
@@ -42,8 +42,8 @@ public class BookCopies {
         this.lost = lost;
     }
 
-    public BookCopies(String bookId, long total, long remainedInStock,
-                      long remainedToRent, long rented, long destroyed, long lost) {
+    public BookStock(String bookId, long total, long remainedInStock,
+                     long remainedToRent, long rented, long destroyed, long lost) {
         this.bookId = bookId;
         this.total = total;
         this.remainedInStock = remainedInStock;
@@ -119,7 +119,7 @@ public class BookCopies {
 
     @Override
     public String toString() {
-        return "BookCopies{" +
+        return "BookStock{" +
                 "id=" + id +
                 ", bookId='" + bookId + '\'' +
                 ", rented=" + rented +

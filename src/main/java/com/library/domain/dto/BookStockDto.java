@@ -1,7 +1,7 @@
 package com.library.domain.dto;
 
 
-public class BookCopiesDto {
+public class BookStockDto {
     private long id;
     private String bookId;
     private long total;
@@ -11,11 +11,11 @@ public class BookCopiesDto {
     private long destroyed;
     private long lost;
 
-    public BookCopiesDto() {
+    public BookStockDto() {
     }
 
-    public BookCopiesDto(String bookId, long total, long remainedInStock,
-                         long remainedToRent, long rented, long destroyed, long lost) {
+    public BookStockDto(String bookId, long total, long remainedInStock,
+                        long remainedToRent, long rented, long destroyed, long lost) {
         this.bookId = bookId;
         this.total = total;
         this.remainedInStock = remainedInStock;

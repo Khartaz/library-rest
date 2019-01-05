@@ -1,10 +1,10 @@
 package com.library.service;
 
 import com.library.domain.Book;
-import com.library.domain.BookCopies;
+import com.library.domain.BookStock;
 import com.library.domain.dto.BookDto;
 import com.library.expeption.ErrorMessages;
-import com.library.mapper.BookCopiesMapper;
+import com.library.mapper.BookStockMapper;
 import com.library.mapper.BookMapper;
 import com.library.repository.BookRepository;
 import com.library.utils.Utils;
@@ -20,12 +20,12 @@ import java.util.stream.Collectors;
 public class BookService {
     private BookRepository bookRepository;
     private BookMapper mapper;
-    private BookCopiesMapper copiesMapper;
+    private BookStockMapper copiesMapper;
     private Utils utils;
 
     @Autowired
     public BookService(BookRepository bookRepository, BookMapper mapper,
-                       BookCopiesMapper copiesMapper, Utils utils) {
+                       BookStockMapper copiesMapper, Utils utils) {
         this.bookRepository = bookRepository;
         this.mapper = mapper;
         this.copiesMapper = copiesMapper;
@@ -38,7 +38,7 @@ public class BookService {
 
         bookDto.setBookId(bookId);
 
-        List<BookCopies> list = bookDto.getBookCopies()
+        List<BookStock> list = bookDto.getBookCopies()
                 .stream()
                 .map(v -> copiesMapper.mapToBookCopies(v))
                 .collect(Collectors.toList());
@@ -77,24 +77,24 @@ public class BookService {
     public BookDto addBookCopy(BookDto bookDto, long quantity) {
         Book book = getBookByBookId(bookDto.getBookId());
 
-        long booksTotal = book.getBookCopies()
+        long booksTotal = book.getBookStock()
                 .stream()
-                .map(BookCopies::getTotal)
+                .map(BookStock::getTotal)
                 .reduce(quantity, Long::sum);
 
-        long booksRemainedToRent = book.getBookCopies()
+        long booksRemainedToRent = book.getBookStock()
                 .stream()
-                .map(BookCopies::getRemainedToRent)
+                .map(BookStock::getRemainedToRent)
                 .reduce(quantity, Long::sum);
 
-        long booksRemainedInStock = book.getBookCopies()
+        long booksRemainedInStock = book.getBookStock()
                 .stream()
-                .map(BookCopies::getRemainedInStock)
+                .map(BookStock::getRemainedInStock)
                 .reduce(quantity, Long::sum);
 
-        book.getBookCopies().forEach(v -> v.setTotal(booksTotal));
-        book.getBookCopies().forEach(v -> v.setRemainedToRent(booksRemainedToRent));
-        book.getBookCopies().forEach(v -> v.setRemainedInStock(booksRemainedInStock));
+        book.getBookStock().forEach(v -> v.setTotal(booksTotal));
+        book.getBookStock().forEach(v -> v.setRemainedToRent(booksRemainedToRent));
+        book.getBookStock().forEach(v -> v.setRemainedInStock(booksRemainedInStock));
 
         bookRepository.save(book);
 
@@ -105,9 +105,9 @@ public class BookService {
     private BookDto removeBookCopy(BookDto bookDto, long quantity) throws ArithmeticException {
         Book book = getBookByBookId(bookDto.getBookId());
 
-        long booksTotal = book.getBookCopies()
+        long booksTotal = book.getBookStock()
                 .stream()
-                .map(BookCopies::getRemainedInStock)
+                .map(BookStock::getRemainedInStock)
                 .mapToLong(v -> v - quantity)
                 .sum();
 
@@ -115,7 +115,7 @@ public class BookService {
             throw new ArithmeticException(ErrorMessages.STOCK_IS_EMPTY.getErrorMessage());
         }
 
-        book.getBookCopies().forEach(v -> v.setRemainedInStock(booksTotal));
+        book.getBookStock().forEach(v -> v.setRemainedInStock(booksTotal));
 
         bookRepository.save(book);
 
@@ -128,23 +128,23 @@ public class BookService {
 
         removeBookCopy(mapper.mapToBookDto(book), quantity);
 
-        long remainedBooks = book.getBookCopies()
+        long remainedBooks = book.getBookStock()
                 .stream()
-                .map(BookCopies::getRemainedToRent)
+                .map(BookStock::getRemainedToRent)
                 .mapToLong(v -> v - quantity)
                 .sum();
 
-        long booksDestroyed = book.getBookCopies()
+        long booksDestroyed = book.getBookStock()
                 .stream()
-                .map(BookCopies::getDestroyed)
+                .map(BookStock::getDestroyed)
                 .reduce(quantity, Long::sum);
 
         if (booksDestroyed < 0) {
             throw new ArithmeticException(ErrorMessages.STOCK_IS_EMPTY.getErrorMessage());
         }
 
-        book.getBookCopies().forEach(v -> v.setRemainedToRent(remainedBooks));
-        book.getBookCopies().forEach(v -> v.setDestroyed(booksDestroyed));
+        book.getBookStock().forEach(v -> v.setRemainedToRent(remainedBooks));
+        book.getBookStock().forEach(v -> v.setDestroyed(booksDestroyed));
 
         bookRepository.save(book);
 
@@ -157,23 +157,23 @@ public class BookService {
 
         removeBookCopy(mapper.mapToBookDto(book), quantity);
 
-        long remainedBooks = book.getBookCopies()
+        long remainedBooks = book.getBookStock()
                 .stream()
-                .map(BookCopies::getRemainedToRent)
+                .map(BookStock::getRemainedToRent)
                 .mapToLong(v -> v - quantity)
                 .sum();
 
-        long booksLost = book.getBookCopies()
+        long booksLost = book.getBookStock()
                 .stream()
-                .map(BookCopies::getLost)
+                .map(BookStock::getLost)
                 .reduce(quantity, Long::sum);
 
         if (booksLost < 0) {
             throw new ArithmeticException(ErrorMessages.STOCK_IS_EMPTY.getErrorMessage());
         }
 
-        book.getBookCopies().forEach(v -> v.setRemainedToRent(remainedBooks));
-        book.getBookCopies().forEach(v -> v.setLost(booksLost));
+        book.getBookStock().forEach(v -> v.setRemainedToRent(remainedBooks));
+        book.getBookStock().forEach(v -> v.setLost(booksLost));
 
         bookRepository.save(book);
 
@@ -184,22 +184,22 @@ public class BookService {
     public Book markAsRented(BookDto bookDto, long quantity) throws ArithmeticException {
         Book book = getBookByBookId(bookDto.getBookId());
 
-        long remainedBooks = book.getBookCopies()
+        long remainedBooks = book.getBookStock()
                 .stream()
-                .map(BookCopies::getRemainedToRent)
+                .map(BookStock::getRemainedToRent)
                 .mapToLong(v -> v - quantity)
                 .sum();
 
-        long booksRented = book.getBookCopies()
+        long booksRented = book.getBookStock()
                 .stream()
-                .map(BookCopies::getRented)
+                .map(BookStock::getRented)
                 .reduce(quantity, Long::sum);
 
         if (remainedBooks < 0 || booksRented < 0) {
             throw new ArithmeticException(ErrorMessages.STOCK_IS_EMPTY.getErrorMessage());
         }
-        book.getBookCopies().forEach(v -> v.setRemainedToRent(remainedBooks));
-        book.getBookCopies().forEach(v -> v.setRented(booksRented));
+        book.getBookStock().forEach(v -> v.setRemainedToRent(remainedBooks));
+        book.getBookStock().forEach(v -> v.setRented(booksRented));
 
         bookRepository.save(book);
 
@@ -210,19 +210,19 @@ public class BookService {
     public Book markAsReturn(String bookId, long quantity) {
         Book book = getBookByBookId(bookId);
 
-        long remainedBooks = book.getBookCopies()
+        long remainedBooks = book.getBookStock()
                 .stream()
-                .map(BookCopies::getRemainedToRent)
+                .map(BookStock::getRemainedToRent)
                 .reduce(quantity, Long::sum);
 
-        long booksRented = book.getBookCopies()
+        long booksRented = book.getBookStock()
                 .stream()
-                .map(BookCopies::getRented)
+                .map(BookStock::getRented)
                 .mapToLong(v -> v - quantity)
                 .sum();
 
-        book.getBookCopies().forEach(v -> v.setRemainedToRent(remainedBooks));
-        book.getBookCopies().forEach(v -> v.setRented(booksRented));
+        book.getBookStock().forEach(v -> v.setRemainedToRent(remainedBooks));
+        book.getBookStock().forEach(v -> v.setRented(booksRented));
 
         bookRepository.save(book);
 

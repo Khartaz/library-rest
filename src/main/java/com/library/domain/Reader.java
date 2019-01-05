@@ -26,7 +26,7 @@ public class Reader {
     private Date created;
 
     @OneToMany(cascade = CascadeType.ALL)
-    private List<RentedBook> rentedBooks = new ArrayList<>();
+    private List<RentBook> rentBooks = new ArrayList<>();
 
     public Reader() {
     }
@@ -44,12 +44,12 @@ public class Reader {
         this.created = created;
     }
 
-    public Reader(String readerId, String firstname, String lastname, Date created, List<RentedBook> rentedBooks) {
+    public Reader(String readerId, String firstname, String lastname, Date created, List<RentBook> rentBooks) {
         this.readerId = readerId;
         this.firstname = firstname;
         this.lastname = lastname;
         this.created = created;
-        this.rentedBooks = rentedBooks;
+        this.rentBooks = rentBooks;
     }
 
     public long getId() {
@@ -92,12 +92,12 @@ public class Reader {
         this.created = created;
     }
 
-    public List<RentedBook> getRentedBooks() {
-        return rentedBooks;
+    public List<RentBook> getRentBooks() {
+        return rentBooks;
     }
 
-    public void setRentedBooks(List<RentedBook> rentedBooks) {
-        this.rentedBooks = rentedBooks;
+    public void setRentBooks(List<RentBook> rentBooks) {
+        this.rentBooks = rentBooks;
     }
 
     @Override

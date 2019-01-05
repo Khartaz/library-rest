@@ -2,7 +2,7 @@ package com.library.domain.dto;
 
 import java.util.Date;
 
-public class RentedBookDto {
+public class RentBookDto {
     private String bookId;
     private String readerId;
     private Date rentDate;
@@ -11,11 +11,11 @@ public class RentedBookDto {
     private boolean returned = false;
     private Date dateOfReturnBook = null;
 
-    public RentedBookDto() {
+    public RentBookDto() {
     }
 
-    public RentedBookDto(String bookId, String readerId, Date rentDate, Date returnDate,
-                         long numberOfBooks, boolean returned, Date dateOfReturnBook) {
+    public RentBookDto(String bookId, String readerId, Date rentDate, Date returnDate,
+                       long numberOfBooks, boolean returned, Date dateOfReturnBook) {
         this.bookId = bookId;
         this.readerId = readerId;
         this.rentDate = rentDate;

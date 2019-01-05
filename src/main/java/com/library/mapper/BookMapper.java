@@ -1,7 +1,7 @@
 package com.library.mapper;
 
 import com.library.domain.Book;
-import com.library.domain.BookCopies;
+import com.library.domain.BookStock;
 import com.library.domain.dto.BookDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -11,11 +11,11 @@ import java.util.stream.Collectors;
 
 @Component
 public class BookMapper {
-    private BookCopiesMapper bookCopiesMapper;
+    private BookStockMapper bookStockMapper;
 
     @Autowired
-    public BookMapper(BookCopiesMapper bookCopiesMapper) {
-        this.bookCopiesMapper = bookCopiesMapper;
+    public BookMapper(BookStockMapper bookStockMapper) {
+        this.bookStockMapper = bookStockMapper;
     }
 
     public Book mapToBook(BookDto bookDto) {
@@ -32,15 +32,15 @@ public class BookMapper {
                 book.getAuthor(),
                 book.getTitle(),
                 book.getYearOfPublication(),
-                book.getBookCopies()
+                book.getBookStock()
                         .stream()
-                        .map(v -> bookCopiesMapper.mapToBookCopiesDto(v))
+                        .map(v -> bookStockMapper.mapToBookCopiesDto(v))
                         .collect(Collectors.toList()));
     }
 
-    public Book mapToBook(BookDto bookDto, List<BookCopies> list) {
+    public Book mapToBook(BookDto bookDto, List<BookStock> list) {
         Book book = mapToBook(bookDto);
-        book.setBookCopies(list);
+        book.setBookStock(list);
 
         return book;
     }

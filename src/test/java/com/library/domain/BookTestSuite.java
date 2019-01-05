@@ -35,11 +35,11 @@ public class BookTestSuite {
         Book book = new Book("test", "test", new Date());
         book.setBookId("bookUniqId2");
 
-        List<BookCopies> bookCopiesList = new ArrayList<>();
-        BookCopies bookCopies = new BookCopies(10,7, 1, 1, 1);
-        bookCopies.setBookId(book.getBookId());
-        bookCopiesList.add(bookCopies);
-        book.setBookCopies(bookCopiesList);
+        List<BookStock> bookStockList = new ArrayList<>();
+        BookStock bookStock = new BookStock(10,7, 1, 1, 1);
+        bookStock.setBookId(book.getBookId());
+        bookStockList.add(bookStock);
+        book.setBookStock(bookStockList);
         //When
         bookRepository.save(book);
         //Then
@@ -56,23 +56,23 @@ public class BookTestSuite {
         Book book = new Book("TestTitle", "TestAuthor", new Date());
         book.setBookId("BookUniqId");
 
-        List<BookCopies> bookCopiesList = new ArrayList<>();
-        BookCopies bookCopies = new BookCopies(10,7, 1, 1, 1);
-        bookCopies.setBookId(book.getBookId());
-        bookCopiesList.add(bookCopies);
-        book.setBookCopies(bookCopiesList);
+        List<BookStock> bookStockList = new ArrayList<>();
+        BookStock bookStock = new BookStock(10,7, 1, 1, 1);
+        bookStock.setBookId(book.getBookId());
+        bookStockList.add(bookStock);
+        book.setBookStock(bookStockList);
 
         Reader reader = new Reader("TestName", "TestLastName", new Date());
         reader.setReaderId("ReaderUniqueIdTest");
 
         Date dateAfterTwoWeeks = utils.rentedDays(14);
 
-        List<RentedBook> rentedBookList = new ArrayList<>();
-        RentedBook rentedBook = new RentedBook(new Date(), dateAfterTwoWeeks);
-        rentedBook.setBookId(book.getBookId());
-        rentedBook.setReaderId(reader.getReaderId());
-        rentedBookList.add(rentedBook);
-        reader.setRentedBooks(rentedBookList);
+        List<RentBook> rentBookList = new ArrayList<>();
+        RentBook rentBook = new RentBook(new Date(), dateAfterTwoWeeks);
+        rentBook.setBookId(book.getBookId());
+        rentBook.setReaderId(reader.getReaderId());
+        rentBookList.add(rentBook);
+        reader.setRentBooks(rentBookList);
         //When
         bookRepository.save(book);
         readerRepository.save(reader);
