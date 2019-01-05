@@ -28,7 +28,7 @@ public class ReaderController {
         this.bookMapper = bookMapper;
     }
 
-    @PostMapping(value = "createReader", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody ReaderDto createReader(@RequestBody ReaderDto readerDto)  {
         return mapper.mapToReaderDto(service.createReader(readerDto));
     }
