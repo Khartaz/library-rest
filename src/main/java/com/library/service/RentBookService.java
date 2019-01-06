@@ -18,7 +18,6 @@ import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Transactional
@@ -79,45 +78,29 @@ public class RentBookService {
         return readerMapper.mapToReaderDto(reader);
     }
 
-    public ReaderDto returnBook(ReaderDto readerDto, String bookId, long quantity) throws BookException {
+    public ReaderDto returnBook(ReaderDto readerDto, String bookId, long quantity) {
         Reader reader = readerService.getReaderByReaderId(readerDto.getReaderId());
-        /*
-        boolean isReturned = checkRentStatus(bookId, reader.getReaderId());
-        if (!isReturned) {
-            throw new BookException(BookMessages.RENT_FIRST.getErrorMessage());
-        }
-        */
+
         String readerId = reader.getReaderId();
 
         RentBook rentedBook = rentBookRepository.findRentBookByReaderIdAndBookIdAndReturnedIsFalse(readerId, bookId);
 
-
-        long booksInStock = Optional.of(rentedBook.getNumberOfBooks()).orElseThrow(NullPointerException::new);
+        long booksInStock = rentedBook.getNumberOfBooks();
 
         if(booksInStock > quantity) {
             long booksLost = booksInStock - quantity;
 
             bookService.markAsLost(bookId, booksLost);
 
-            rentedBook.setDateOfReturnBook(new Date());
-            rentedBook.setReturned(true);
-            rentedBook.setNumberOfBooks(0);
-
-            bookService.markAsReturn(bookId, booksInStock);
-
-            readerRepository.save(reader);
-
-            return readerMapper.mapToReaderDto(reader);
-
         } else if (booksInStock < quantity) {
             throw new NullPointerException(BookMessages.BOOKS_TO_LESS.getErrorMessage());
-        }
+        }           //Change to BookException
 
         rentedBook.setDateOfReturnBook(new Date());
         rentedBook.setReturned(true);
         rentedBook.setNumberOfBooks(0);
 
-        bookService.markAsReturn(bookId, quantity);
+        bookService.markAsReturn(bookId, booksInStock);
 
         readerRepository.save(reader);
 
