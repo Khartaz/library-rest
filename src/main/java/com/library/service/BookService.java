@@ -66,8 +66,8 @@ public class BookService {
 
     public boolean deleteBook(BookDto bookDto) {
         Book book = getBookByBookId(bookDto.getBookId());
-        long id = book.getId();
 
+        long id = book.getId();
         bookRepository.delete(id);
 
         return true;
