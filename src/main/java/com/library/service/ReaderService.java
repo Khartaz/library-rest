@@ -63,6 +63,7 @@ public class ReaderService {
         Reader reader = getReaderByReaderId(readerDto.getReaderId());
 
         long id = reader.getId();
+
         repository.delete(id);
 
         return true;
