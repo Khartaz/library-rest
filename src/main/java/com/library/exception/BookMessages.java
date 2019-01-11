@@ -1,12 +1,14 @@
-package com.library.expeption;
+package com.library.exception;
 
-public enum  ReaderMessages {
+public enum BookMessages {
 
-    READER_NOT_FOUND("Reader with provided id is not found");
+    BOOK_RENTED("Book with provided id already rented"),
+    BOOKS_TO_LESS("Books rented with provided id is less. Please enter correct quantity"),
+    RENT_FIRST("Please first rent some books");
 
     private String errorMessage;
 
-    ReaderMessages(String errorMessage) {
+    BookMessages(String errorMessage) {
         this.errorMessage = errorMessage;
     }
 

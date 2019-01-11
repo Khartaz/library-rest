@@ -2,7 +2,7 @@ package com.library.web.rest.controller;
 
 import com.library.domain.dto.BookDto;
 import com.library.domain.dto.ReaderDto;
-import com.library.expeption.BookException;
+import com.library.exception.BookException;
 import com.library.mapper.BookMapper;
 import com.library.mapper.ReaderMapper;
 import com.library.service.BookService;

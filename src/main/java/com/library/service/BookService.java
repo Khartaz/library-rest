@@ -3,7 +3,7 @@ package com.library.service;
 import com.library.domain.Book;
 import com.library.domain.BookStock;
 import com.library.domain.dto.BookDto;
-import com.library.expeption.ErrorMessages;
+import com.library.exception.ErrorMessages;
 import com.library.mapper.BookStockMapper;
 import com.library.mapper.BookMapper;
 import com.library.repository.BookRepository;
@@ -57,7 +57,6 @@ public class BookService {
 
     public Book getBookByBookId(String bookId) throws NullPointerException {
         Book book = bookRepository.findBookByBookId(bookId);
-
         if (book == null) {
             throw new NullPointerException(ErrorMessages.STOCK_IS_EMPTY.getErrorMessage());
         }
@@ -101,7 +100,6 @@ public class BookService {
         return mapper.mapToBookDto(book);
     }
 
-    @SuppressWarnings("Duplicates")
     private BookDto removeBookCopy(BookDto bookDto, long quantity) throws ArithmeticException {
         Book book = getBookByBookId(bookDto.getBookId());
 

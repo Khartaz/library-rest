@@ -1,4 +1,4 @@
-package com.library.expeption;
+package com.library.exception;
 
 import java.util.Date;
 
