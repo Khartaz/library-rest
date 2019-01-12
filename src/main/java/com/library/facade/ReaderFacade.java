@@ -11,6 +11,11 @@ import com.library.web.rest.response.OperationStatus;
 import com.library.web.rest.response.ResponseOperationNames;
 import com.library.web.rest.response.ResponseOperationStatus;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.Resource;
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
+
+import org.springframework.hateoas.mvc.ControllerLinkBuilder;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -63,6 +68,7 @@ public class ReaderFacade {
     }
 
     public ReaderDto getReaderByReaderId(String readerId) {
-        return mapper.mapToReaderDto(readerService.getReaderByReaderId(readerId).get());
+      return mapper.mapToReaderDto(readerService.getReaderByReaderId(readerId).get());
+
     }
 }

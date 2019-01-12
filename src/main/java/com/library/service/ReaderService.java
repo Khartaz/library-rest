@@ -47,11 +47,11 @@ public class ReaderService {
         return true;
     }
 
-    public Optional<Reader> getReaderByReaderId(String readerId) throws ReaderNotFoundException {
+    public Optional<Reader> getReaderByReaderId(String readerId) {
         Optional<Reader> reader = repository.findReaderByReaderId(readerId);
 
         if (!reader.isPresent()) {
-            throw new ReaderNotFoundException("Id is " + readerId);
+            throw new ReaderNotFoundException(ReaderMessages.READER_NOT_FOUND.getErrorMessage());
         }
         return reader;
     }

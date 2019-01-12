@@ -5,8 +5,13 @@ import com.library.exception.ReaderNotFoundException;
 import com.library.facade.ReaderFacade;
 import com.library.web.rest.response.OperationStatus;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.Resource;
+import org.springframework.hateoas.mvc.ControllerLinkBuilder;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
 @RestController
 @RequestMapping(value = "/v1/readers")
@@ -43,7 +48,16 @@ public class ReaderController {
 
     @GetMapping(value = "/{readerId}",
             produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ReaderDto getReaderByReaderId(@PathVariable String readerId)  {
-        return facade.getReaderByReaderId(readerId);
+    public Resource<ReaderDto> getReaderByReaderId(@PathVariable String readerId)  {
+
+        ReaderDto readerDto = facade.getReaderByReaderId(readerId);
+
+        Resource<ReaderDto> resource = new Resource<>(readerDto);
+
+        ControllerLinkBuilder linkTo = linkTo(methodOn(this.getClass()).getReaderByReaderId(readerId));
+
+        resource.add(linkTo.withRel("reader"));
+
+        return resource;
     }
 }
