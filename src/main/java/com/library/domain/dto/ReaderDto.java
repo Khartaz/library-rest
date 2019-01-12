@@ -77,4 +77,16 @@ public class ReaderDto {
     public void setRentedBooks(List<RentBookDto> rentedBooks) {
         this.rentedBooks = rentedBooks;
     }
+
+    @Override
+    public String toString() {
+        return "ReaderDto{" +
+                "id=" + id +
+                ", readerId='" + readerId + '\'' +
+                ", firstname='" + firstname + '\'' +
+                ", lastname='" + lastname + '\'' +
+                ", created=" + created +
+                ", rentedBooks=" + rentedBooks +
+                '}';
+    }
 }
