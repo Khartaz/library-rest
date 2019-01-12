@@ -1,4 +1,4 @@
-package com.library.exception;
+package com.library.exception.reader;
 
 public enum  ReaderMessages {
 

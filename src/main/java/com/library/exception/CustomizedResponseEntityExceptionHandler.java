@@ -1,5 +1,9 @@
 package com.library.exception;
 
+import com.library.exception.book.BookNotFoundException;
+import com.library.exception.book.BookStockException;
+import com.library.exception.reader.ReaderNotFoundException;
+import com.library.exception.rent.RentBookException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;

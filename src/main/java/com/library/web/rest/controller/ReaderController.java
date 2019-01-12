@@ -1,7 +1,7 @@
 package com.library.web.rest.controller;
 
 import com.library.domain.dto.ReaderDto;
-import com.library.exception.ReaderNotFoundException;
+import com.library.exception.reader.ReaderNotFoundException;
 import com.library.facade.ReaderFacade;
 import com.library.web.rest.response.OperationStatus;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,4 +1,4 @@
-package com.library.exception;
+package com.library.exception.book;
 
 public enum BookMessages {
 

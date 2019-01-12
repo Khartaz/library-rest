@@ -1,12 +1,13 @@
-package com.library.exception;
+package com.library.exception.book;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(HttpStatus.NOT_FOUND)
-public class RentBookException extends RuntimeException {
+public class BookNotFoundException extends RuntimeException {
 
-    public RentBookException(String exception) {
+    public BookNotFoundException(String exception) {
         super(exception);
     }
+
 }
