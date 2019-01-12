@@ -28,6 +28,12 @@ public class BookController {
         return facade.deleteBook(bookId);
     }
 
+    @GetMapping(value = "/{bookId}",
+            produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public BookDto getBookByBookId(@PathVariable String bookId) {
+        return facade.getBookByBookId(bookId);
+    }
+
     @PutMapping(value = "/copy/{bookId}/qty/{quantity}",
             produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public BookDto addBooksToStock(@PathVariable String bookId, @PathVariable long quantity) {

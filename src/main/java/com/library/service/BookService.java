@@ -4,7 +4,6 @@ import com.library.domain.Book;
 import com.library.domain.BookStock;
 import com.library.domain.dto.BookDto;
 import com.library.exception.BookNotFoundException;
-import com.library.exception.BookMessages;
 import com.library.exception.ErrorMessages;
 import com.library.mapper.BookStockMapper;
 import com.library.mapper.BookMapper;
@@ -15,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -34,8 +34,10 @@ public class BookService {
         this.utils = utils;
     }
 
-    public Book createBook(BookDto bookDto) {
-        checkBookId(mapper.mapToBook(bookDto));
+    public Book createBook(BookDto bookDto) throws BookNotFoundException {
+        if (!checkBookId(bookDto.getBookId())) {
+            throw new BookNotFoundException(bookDto.getBookId());
+        }
         String bookId = utils.generateId(8);
 
         bookDto.setBookId(bookId);
@@ -50,23 +52,25 @@ public class BookService {
         return bookRepository.save(mapper.mapToBook(bookDto, list));
     }
 
-    private Book checkBookId(Book book) throws BookNotFoundException {
-        if (bookRepository.findBookByBookId(book.getBookId()) != null) {
-            throw new BookNotFoundException(BookMessages.BOOK_EXISTS.getErrorMessage());
-        } 
-        return book;
-    }
+    public Optional<Book> getBookByBookId(String bookId) throws BookNotFoundException {
+        Optional<Book> book = bookRepository.findBookByBookId(bookId);
 
-    public Book getBookByBookId(String bookId) throws NullPointerException {
-        Book book = bookRepository.findBookByBookId(bookId);
-        if (book == null) {
-            throw new NullPointerException(ErrorMessages.STOCK_IS_EMPTY.getErrorMessage());
+        if (!book.isPresent()) {
+            throw new BookNotFoundException("Id is " + bookId);
         }
         return book;
     }
 
+    public boolean checkBookId(String bookId) throws BookNotFoundException {
+        Optional<Book> book = bookRepository.findBookByBookId(bookId);
+        if (book.isPresent()) {
+            throw new BookNotFoundException(ErrorMessages.STOCK_IS_EMPTY.getErrorMessage());
+        }
+        return true;
+    }
+
     public boolean deleteBook(BookDto bookDto) {
-        Book book = getBookByBookId(bookDto.getBookId());
+        Book book = getBookByBookId(bookDto.getBookId()).get();
 
         long id = book.getId();
         bookRepository.delete(id);
@@ -75,8 +79,8 @@ public class BookService {
     }
 
     @SuppressWarnings("Duplicates")
-    public BookDto addBookCopy(BookDto bookDto, long quantity) {
-        Book book = getBookByBookId(bookDto.getBookId());
+    public BookDto addBookCopy(BookDto bookDto, long quantity) throws ArithmeticException  {
+        Book book = getBookByBookId(bookDto.getBookId()).get();
 
         long booksTotal = book.getBookStock()
                 .stream()
@@ -103,7 +107,7 @@ public class BookService {
     }
 
     private BookDto removeBookCopy(BookDto bookDto, long quantity) throws ArithmeticException {
-        Book book = getBookByBookId(bookDto.getBookId());
+        Book book = getBookByBookId(bookDto.getBookId()).get();
 
         long booksTotal = book.getBookStock()
                 .stream()
@@ -124,7 +128,7 @@ public class BookService {
 
     @SuppressWarnings("Duplicates")
     public BookDto markAsDestroyed(BookDto bookDto, long quantity) throws ArithmeticException {
-        Book book = getBookByBookId(bookDto.getBookId());
+        Book book = getBookByBookId(bookDto.getBookId()).get();
 
         removeBookCopy(mapper.mapToBookDto(book), quantity);
 
@@ -153,7 +157,7 @@ public class BookService {
 
     @SuppressWarnings("Duplicates")
     public BookDto markAsLost(String bookId, long quantity) throws ArithmeticException {
-        Book book = getBookByBookId(bookId);
+        Book book = getBookByBookId(bookId).get();
 
         removeBookCopy(mapper.mapToBookDto(book), quantity);
 
@@ -182,7 +186,7 @@ public class BookService {
 
     @SuppressWarnings("Duplicates")
     public Book markAsRented(BookDto bookDto, long quantity) throws ArithmeticException {
-        Book book = getBookByBookId(bookDto.getBookId());
+        Book book = getBookByBookId(bookDto.getBookId()).get();
 
         long remainedBooks = book.getBookStock()
                 .stream()
@@ -207,8 +211,8 @@ public class BookService {
     }
 
     @SuppressWarnings("Duplicates")
-    public Book markAsReturn(String bookId, long quantity) {
-        Book book = getBookByBookId(bookId);
+    public Book markAsReturn(String bookId, long quantity) throws ArithmeticException  {
+        Book book = getBookByBookId(bookId).get();
 
         long remainedBooks = book.getBookStock()
                 .stream()

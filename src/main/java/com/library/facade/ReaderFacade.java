@@ -2,7 +2,6 @@ package com.library.facade;
 
 import com.library.domain.dto.BookDto;
 import com.library.domain.dto.ReaderDto;
-import com.library.exception.BookNotFoundException;
 import com.library.mapper.BookMapper;
 import com.library.mapper.ReaderMapper;
 import com.library.service.BookService;
@@ -32,27 +31,27 @@ public class ReaderFacade {
         this.rentBookService = rentBookService;
     }
 
-    public ReaderDto createNewReader(ReaderDto readerDto) {
+    public ReaderDto createNewReader(ReaderDto readerDto)  {
         return mapper.mapToReaderDto(readerService.createReader(readerDto));
     }
 
-    public ReaderDto rentBook(String bookId, String readerId, long quantity) throws BookNotFoundException {
-        BookDto bookDto = bookMapper.mapToBookDto(bookService.getBookByBookId(bookId));
+    public ReaderDto rentBook(String bookId, String readerId, long quantity)  {
+        ReaderDto readerDto = mapper.mapToReaderDto(readerService.getReaderByReaderId(readerId).get());
 
-        ReaderDto readerDto = mapper.mapToReaderDto(readerService.getReaderByReaderId(readerId));
+        BookDto bookDto = bookMapper.mapToBookDto(bookService.getBookByBookId(bookId).get());
 
         return rentBookService.rentBook(bookDto, readerDto, quantity);
     }
 
-    public ReaderDto returnBook(String bookId, String readerId, long quantity) {
-        ReaderDto readerDto = mapper.mapToReaderDto(readerService.getReaderByReaderId(readerId));
+    public ReaderDto returnBook(String readerId, String bookId, long quantity)  {
+        ReaderDto readerDto = mapper.mapToReaderDto(readerService.getReaderByReaderId(readerId).get());
 
         return rentBookService.returnBook(readerDto, bookId, quantity);
     }
 
     public OperationStatus deleteReader(String readerId) {
         OperationStatus result = new OperationStatus();
-        ReaderDto readerDto = mapper.mapToReaderDto(readerService.getReaderByReaderId(readerId));
+        ReaderDto readerDto = mapper.mapToReaderDto(readerService.getReaderByReaderId(readerId).get());
 
         boolean status = readerService.deleteReader(readerDto);
 
@@ -61,5 +60,9 @@ public class ReaderFacade {
             result.setOperationStatus(ResponseOperationStatus.SUCCESS.name());
         }
         return result;
+    }
+
+    public ReaderDto getReaderByReaderId(String readerId) {
+        return mapper.mapToReaderDto(readerService.getReaderByReaderId(readerId).get());
     }
 }

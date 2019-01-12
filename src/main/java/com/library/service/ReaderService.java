@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -25,11 +26,9 @@ public class ReaderService {
         this.utils = utils;
     }
 
-    public Reader createReader(ReaderDto readerDto)   {
-        try {
-            checkReaderId(mapper.mapToReader(readerDto));
-        } catch (ReaderException e) {
-            //
+    public Reader createReader(ReaderDto readerDto) throws ReaderNotFoundException {
+        if (!checkReaderId(readerDto.getReaderId())) {
+            throw new ReaderNotFoundException(readerDto.getReaderId());
         }
         String readerId = utils.generateId(5);
 
@@ -39,28 +38,26 @@ public class ReaderService {
         return repository.save(mapper.mapToReader(readerDto));
     }
 
-    private Reader checkReaderId(Reader reader) throws ReaderException {
-        try {
-            if (repository.findReaderByReaderId(reader.getReaderId()) != null) {
-                throw new ReaderException(ErrorMessages.RECORD_ALREADY_EXISTS.getErrorMessage());
-            }
-        } catch (NullPointerException e) {
-            //
+    private boolean checkReaderId(String readerId) throws ReaderNotFoundException {
+        Optional<Reader> reader = repository.findReaderByReaderId(readerId);
+        if (reader.isPresent()) {
+            throw new ReaderNotFoundException(ReaderMessages.READER_NOT_FOUND.getErrorMessage());
+        }
+
+        return true;
+    }
+
+    public Optional<Reader> getReaderByReaderId(String readerId) throws ReaderNotFoundException {
+        Optional<Reader> reader = repository.findReaderByReaderId(readerId);
+
+        if (!reader.isPresent()) {
+            throw new ReaderNotFoundException("Id is " + readerId);
         }
         return reader;
     }
 
-    public Reader getReaderByReaderId(String readerId) throws NullPointerException {
-        Reader reader = repository.findReaderByReaderId(readerId);
-
-        if (reader == null) {
-            throw new NullPointerException(ReaderMessages.READER_NOT_FOUND.getErrorMessage());
-        }
-        return reader;
-    }
-
-    public boolean deleteReader(ReaderDto readerDto) {
-        Reader reader = getReaderByReaderId(readerDto.getReaderId());
+    public boolean deleteReader(ReaderDto readerDto) throws ReaderNotFoundException {
+        Reader reader = getReaderByReaderId(readerDto.getReaderId()).get();
 
         long id = reader.getId();
 
@@ -68,5 +65,4 @@ public class ReaderService {
 
         return true;
     }
-
 }

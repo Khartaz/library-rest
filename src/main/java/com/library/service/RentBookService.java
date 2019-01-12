@@ -5,8 +5,8 @@ import com.library.domain.Reader;
 import com.library.domain.RentBook;
 import com.library.domain.dto.BookDto;
 import com.library.domain.dto.ReaderDto;
-import com.library.exception.BookNotFoundException;
 import com.library.exception.BookMessages;
+import com.library.exception.ReaderNotFoundException;
 import com.library.mapper.ReaderMapper;
 import com.library.repository.ReaderRepository;
 import com.library.repository.RentBookRepository;
@@ -47,13 +47,12 @@ public class RentBookService {
         return book == null;
     }
 
-
-    public ReaderDto rentBook(BookDto bookDto, ReaderDto readerDto, long quantity) throws BookNotFoundException {
-        Reader reader = readerService.getReaderByReaderId(readerDto.getReaderId());
+    public ReaderDto rentBook(BookDto bookDto, ReaderDto readerDto, long quantity) throws ReaderNotFoundException {
+        Reader reader = readerService.getReaderByReaderId(readerDto.getReaderId()).get();
 
         boolean isReturned = checkRentStatus(bookDto.getBookId(), reader.getReaderId());
         if (!isReturned) {
-            throw new BookNotFoundException(BookMessages.BOOK_RENTED.getErrorMessage());
+            throw new ReaderNotFoundException(BookMessages.BOOK_RENTED.getErrorMessage());
         }
 
         Book book = bookService.markAsRented(bookDto, quantity);
@@ -78,8 +77,8 @@ public class RentBookService {
         return readerMapper.mapToReaderDto(reader);
     }
 
-    public ReaderDto returnBook(ReaderDto readerDto, String bookId, long quantity) {
-        Reader reader = readerService.getReaderByReaderId(readerDto.getReaderId());
+    public ReaderDto returnBook(ReaderDto readerDto, String bookId, long quantity) throws ReaderNotFoundException {
+        Reader reader = readerService.getReaderByReaderId(readerDto.getReaderId()).get();
 
         String readerId = reader.getReaderId();
 
@@ -93,8 +92,8 @@ public class RentBookService {
             bookService.markAsLost(bookId, booksLost);
 
         } else if (booksInStock < quantity) {
-            throw new NullPointerException(BookMessages.BOOKS_TO_LESS.getErrorMessage());
-        }           //Change to BookNotFoundException
+            throw new ReaderNotFoundException(BookMessages.BOOKS_TO_LESS.getErrorMessage());
+        }
 
         rentedBook.setDateOfReturnBook(new Date());
         rentedBook.setReturned(true);
