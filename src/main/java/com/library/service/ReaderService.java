@@ -26,9 +26,9 @@ public class ReaderService {
         this.utils = utils;
     }
 
-    public Reader createReader(ReaderDto readerDto) throws ReaderNotFoundException {
+    public Reader createReader(ReaderDto readerDto) {
         if (!checkReaderId(readerDto.getReaderId())) {
-            throw new ReaderNotFoundException(readerDto.getReaderId());
+            throw new ReaderNotFoundException(ReaderMessages.READER_NOT_FOUND.getErrorMessage());
         }
         String readerId = utils.generateId(5);
 
@@ -38,7 +38,7 @@ public class ReaderService {
         return repository.save(mapper.mapToReader(readerDto));
     }
 
-    private boolean checkReaderId(String readerId) throws ReaderNotFoundException {
+    private boolean checkReaderId(String readerId) {
         Optional<Reader> reader = repository.findReaderByReaderId(readerId);
         if (reader.isPresent()) {
             throw new ReaderNotFoundException(ReaderMessages.READER_NOT_FOUND.getErrorMessage());

@@ -6,7 +6,6 @@ public enum ErrorMessages {
     RECORD_ALREADY_EXISTS("Record already exists"),
     INTERNAL_SERVER_ERROR("Internal server error"),
     AUTHENTICATION_FAILED("Authentication failed"),
-    STOCK_IS_EMPTY("Book stock with provided id is empty"),
     COULD_NOT_DELETE_RECORD("Could not delete record");
 
     private String errorMessage;

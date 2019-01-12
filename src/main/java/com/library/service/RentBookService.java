@@ -5,8 +5,7 @@ import com.library.domain.Reader;
 import com.library.domain.RentBook;
 import com.library.domain.dto.BookDto;
 import com.library.domain.dto.ReaderDto;
-import com.library.exception.BookMessages;
-import com.library.exception.ReaderNotFoundException;
+import com.library.exception.*;
 import com.library.mapper.ReaderMapper;
 import com.library.repository.ReaderRepository;
 import com.library.repository.RentBookRepository;
@@ -77,14 +76,19 @@ public class RentBookService {
         return readerMapper.mapToReaderDto(reader);
     }
 
-    public ReaderDto returnBook(ReaderDto readerDto, String bookId, long quantity) throws ReaderNotFoundException {
+    public ReaderDto returnBook(ReaderDto readerDto, String bookId, long quantity) throws BookStockException {
         Reader reader = readerService.getReaderByReaderId(readerDto.getReaderId()).get();
 
         String readerId = reader.getReaderId();
 
         RentBook rentedBook = rentBookRepository.findRentBookByReaderIdAndBookIdAndReturnedIsFalse(readerId, bookId);
 
+        if (rentedBook == null) {
+            throw new RentBookException(BookMessages.RENT_FIRST.getErrorMessage());
+        }
+
         long booksInStock = rentedBook.getNumberOfBooks();
+
 
         if(booksInStock > quantity) {
             long booksLost = booksInStock - quantity;
