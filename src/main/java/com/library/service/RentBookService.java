@@ -5,7 +5,7 @@ import com.library.domain.Reader;
 import com.library.domain.RentBook;
 import com.library.domain.dto.BookDto;
 import com.library.domain.dto.ReaderDto;
-import com.library.exception.BookException;
+import com.library.exception.BookNotFoundException;
 import com.library.exception.BookMessages;
 import com.library.mapper.ReaderMapper;
 import com.library.repository.ReaderRepository;
@@ -48,12 +48,12 @@ public class RentBookService {
     }
 
 
-    public ReaderDto rentBook(BookDto bookDto, ReaderDto readerDto, long quantity) throws BookException {
+    public ReaderDto rentBook(BookDto bookDto, ReaderDto readerDto, long quantity) throws BookNotFoundException {
         Reader reader = readerService.getReaderByReaderId(readerDto.getReaderId());
 
         boolean isReturned = checkRentStatus(bookDto.getBookId(), reader.getReaderId());
         if (!isReturned) {
-            throw new BookException(BookMessages.BOOK_RENTED.getErrorMessage());
+            throw new BookNotFoundException(BookMessages.BOOK_RENTED.getErrorMessage());
         }
 
         Book book = bookService.markAsRented(bookDto, quantity);
@@ -94,7 +94,7 @@ public class RentBookService {
 
         } else if (booksInStock < quantity) {
             throw new NullPointerException(BookMessages.BOOKS_TO_LESS.getErrorMessage());
-        }           //Change to BookException
+        }           //Change to BookNotFoundException
 
         rentedBook.setDateOfReturnBook(new Date());
         rentedBook.setReturned(true);

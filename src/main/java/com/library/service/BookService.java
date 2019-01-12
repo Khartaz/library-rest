@@ -3,6 +3,8 @@ package com.library.service;
 import com.library.domain.Book;
 import com.library.domain.BookStock;
 import com.library.domain.dto.BookDto;
+import com.library.exception.BookNotFoundException;
+import com.library.exception.BookMessages;
 import com.library.exception.ErrorMessages;
 import com.library.mapper.BookStockMapper;
 import com.library.mapper.BookMapper;
@@ -48,10 +50,10 @@ public class BookService {
         return bookRepository.save(mapper.mapToBook(bookDto, list));
     }
 
-    private Book checkBookId(Book book) throws RuntimeException {
+    private Book checkBookId(Book book) throws BookNotFoundException {
         if (bookRepository.findBookByBookId(book.getBookId()) != null) {
-            throw new RuntimeException(ErrorMessages.RECORD_ALREADY_EXISTS.getErrorMessage());
-        }
+            throw new BookNotFoundException(BookMessages.BOOK_EXISTS.getErrorMessage());
+        } 
         return book;
     }
 
