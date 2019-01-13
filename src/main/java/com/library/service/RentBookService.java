@@ -50,7 +50,7 @@ public class RentBookService {
     }
 
     public ReaderDto rentBook(BookDto bookDto, ReaderDto readerDto, long quantity) throws ReaderNotFoundException {
-        Reader reader = readerService.getReaderByReaderId(readerDto.getReaderId()).get();
+        Reader reader = readerService.getReaderByReaderId(readerDto.getReaderId());
 
         boolean isReturned = checkRentStatus(bookDto.getBookId(), reader.getReaderId());
         if (!isReturned) {
@@ -80,7 +80,7 @@ public class RentBookService {
     }
 
     public ReaderDto returnBook(ReaderDto readerDto, String bookId, long quantity) throws BookStockException {
-        Reader reader = readerService.getReaderByReaderId(readerDto.getReaderId()).get();
+        Reader reader = readerService.getReaderByReaderId(readerDto.getReaderId());
 
         String readerId = reader.getReaderId();
 

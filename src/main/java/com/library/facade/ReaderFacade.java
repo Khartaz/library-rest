@@ -37,7 +37,7 @@ public class ReaderFacade {
     }
 
     public ReaderDto rentBook(String bookId, String readerId, long quantity)  {
-        ReaderDto readerDto = mapper.mapToReaderDto(readerService.getReaderByReaderId(readerId).get());
+        ReaderDto readerDto = mapper.mapToReaderDto(readerService.getReaderByReaderId(readerId));
 
         BookDto bookDto = bookMapper.mapToBookDto(bookService.getBookByBookId(bookId).get());
 
@@ -45,14 +45,14 @@ public class ReaderFacade {
     }
 
     public ReaderDto returnBook(String readerId, String bookId, long quantity)  {
-        ReaderDto readerDto = mapper.mapToReaderDto(readerService.getReaderByReaderId(readerId).get());
+        ReaderDto readerDto = mapper.mapToReaderDto(readerService.getReaderByReaderId(readerId));
 
         return rentBookService.returnBook(readerDto, bookId, quantity);
     }
 
     public OperationStatus deleteReader(String readerId) {
         OperationStatus result = new OperationStatus();
-        ReaderDto readerDto = mapper.mapToReaderDto(readerService.getReaderByReaderId(readerId).get());
+        ReaderDto readerDto = mapper.mapToReaderDto(readerService.getReaderByReaderId(readerId));
 
         boolean status = readerService.deleteReader(readerDto);
 
@@ -64,7 +64,7 @@ public class ReaderFacade {
     }
 
     public ReaderDto getReaderByReaderId(String readerId) {
-      return mapper.mapToReaderDto(readerService.getReaderByReaderId(readerId).get());
+      return mapper.mapToReaderDto(readerService.getReaderByReaderId(readerId));
 
     }
 }

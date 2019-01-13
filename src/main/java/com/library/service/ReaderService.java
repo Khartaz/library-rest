@@ -48,17 +48,17 @@ public class ReaderService {
         return true;
     }
 
-    public Optional<Reader> getReaderByReaderId(String readerId) {
-        Optional<Reader> reader = repository.findReaderByReaderId(readerId);
-
-        if (!reader.isPresent()) {
-            throw new ReaderNotFoundException(ReaderMessages.READER_NOT_FOUND.getErrorMessage());
+    public Reader getReaderByReaderId(String readerId) {
+        Optional<Reader> optionalReader = repository.findReaderByReaderId(readerId);
+        Reader reader = null;
+        if (optionalReader.isPresent()) {
+            reader = optionalReader.orElseThrow(new ReaderNotFoundException(ReaderMessages.READER_NOT_FOUND.getErrorMessage()));
         }
         return reader;
     }
 
     public boolean deleteReader(ReaderDto readerDto) throws ReaderNotFoundException {
-        Reader reader = getReaderByReaderId(readerDto.getReaderId()).get();
+        Reader reader = getReaderByReaderId(readerDto.getReaderId());
 
         long id = reader.getId();
 

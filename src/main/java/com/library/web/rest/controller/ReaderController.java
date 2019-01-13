@@ -1,7 +1,6 @@
 package com.library.web.rest.controller;
 
 import com.library.domain.dto.ReaderDto;
-import com.library.exception.reader.ReaderNotFoundException;
 import com.library.facade.ReaderFacade;
 import com.library.web.rest.response.OperationStatus;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,19 +29,21 @@ public class ReaderController {
 
     @PutMapping(value = "/{readerId}/rent/{bookId}/qty/{quantity}",
             produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ReaderDto rentBook(@PathVariable String readerId, @PathVariable String bookId, @PathVariable long quantity)  {
+    public ReaderDto rentBook
+            (@PathVariable String readerId, @PathVariable String bookId, @PathVariable long quantity)  {
         return facade.rentBook(bookId, readerId, quantity);
     }
 
     @PutMapping(value = "/{readerId}/return/{bookId}/qty/{quantity}",
             produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ReaderDto returnBook(@PathVariable String readerId, @PathVariable String bookId, @PathVariable long quantity)  {
+    public ReaderDto returnBook
+            (@PathVariable String readerId, @PathVariable String bookId, @PathVariable long quantity)  {
         return facade.returnBook(readerId, bookId, quantity);
     }
 
     @DeleteMapping(value = "/{readerId}",
             produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public OperationStatus deleteReader(@PathVariable String readerId) throws ReaderNotFoundException {
+    public OperationStatus deleteReader(@PathVariable String readerId) {
         return facade.deleteReader(readerId);
     }
 
