@@ -6,7 +6,7 @@ import com.library.domain.RentBook;
 import com.library.domain.dto.BookDto;
 import com.library.domain.dto.ReaderDto;
 import com.library.exception.book.BookMessages;
-import com.library.exception.book.stock.BookStockException;
+import com.library.exception.stock.BookStockException;
 import com.library.exception.reader.ReaderNotFoundException;
 import com.library.exception.rent.RentBookNotFoundException;
 import com.library.mapper.ReaderMapper;

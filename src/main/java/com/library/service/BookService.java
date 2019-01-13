@@ -6,7 +6,7 @@ import com.library.domain.dto.BookDto;
 import com.library.exception.book.BookExistException;
 import com.library.exception.book.BookMessages;
 import com.library.exception.book.BookNotFoundException;
-import com.library.exception.book.stock.BookStockException;
+import com.library.exception.stock.BookStockException;
 import com.library.mapper.BookStockMapper;
 import com.library.mapper.BookMapper;
 import com.library.repository.BookRepository;
