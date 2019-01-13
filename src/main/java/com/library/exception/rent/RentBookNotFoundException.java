@@ -1,12 +1,13 @@
 package com.library.exception.rent;
 
+import com.library.exception.NotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(HttpStatus.NOT_FOUND)
-public class RentBookException extends RuntimeException {
+public class RentBookNotFoundException extends NotFoundException {
 
-    public RentBookException(String exception) {
+    public RentBookNotFoundException(String exception) {
         super(exception);
     }
 }

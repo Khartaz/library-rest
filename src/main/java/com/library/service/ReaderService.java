@@ -2,6 +2,7 @@ package com.library.service;
 
 import com.library.domain.Reader;
 import com.library.domain.dto.ReaderDto;
+import com.library.exception.reader.ReaderExistException;
 import com.library.exception.reader.ReaderMessages;
 import com.library.exception.reader.ReaderNotFoundException;
 import com.library.mapper.ReaderMapper;
@@ -42,7 +43,7 @@ public class ReaderService {
     private boolean checkReaderId(String readerId) {
         Optional<Reader> reader = repository.findReaderByReaderId(readerId);
         if (reader.isPresent()) {
-            throw new ReaderNotFoundException(ReaderMessages.READER_NOT_FOUND.getErrorMessage());
+            throw new ReaderExistException(ReaderMessages.READER_EXIST.getErrorMessage());
         }
 
         return true;

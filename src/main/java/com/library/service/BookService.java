@@ -6,7 +6,7 @@ import com.library.domain.dto.BookDto;
 import com.library.exception.book.BookExistException;
 import com.library.exception.book.BookMessages;
 import com.library.exception.book.BookNotFoundException;
-import com.library.exception.book.BookStockException;
+import com.library.exception.book.stock.BookStockException;
 import com.library.mapper.BookStockMapper;
 import com.library.mapper.BookMapper;
 import com.library.repository.BookRepository;
@@ -69,7 +69,7 @@ public class BookService {
     public boolean checkBookId(String bookId) {
         Optional<Book> book = bookRepository.findBookByBookId(bookId);
         if (book.isPresent()) {
-            throw new BookNotFoundException(BookMessages.BOOK_NOT_FOUND.getErrorMessage());
+            throw new BookExistException(BookMessages.BOOK_EXIST.getErrorMessage());
         }
         return true;
     }

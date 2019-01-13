@@ -1,10 +1,8 @@
 package com.library.exception;
 
 import com.library.exception.book.BookExistException;
-import com.library.exception.book.BookNotFoundException;
-import com.library.exception.book.BookStockException;
-import com.library.exception.reader.ReaderNotFoundException;
-import com.library.exception.rent.RentBookException;
+import com.library.exception.book.stock.BookStockException;
+import com.library.exception.rent.RentBookNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -19,16 +17,16 @@ import java.util.Date;
 @RestController
 public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
 
-    @ExceptionHandler(ReaderNotFoundException.class)
-    public final ResponseEntity<ExceptionResponse> handleReaderNotFoundException(ReaderNotFoundException ex, WebRequest request) {
+    @ExceptionHandler(NotFoundException.class)
+    public final ResponseEntity<ExceptionResponse> handleNotFoundException(NotFoundException ex, WebRequest request) {
         ExceptionResponse exceptionResponse = new ExceptionResponse(
                 new Date(), ex.getMessage(), request.getDescription(false));
 
         return new ResponseEntity<>(exceptionResponse, HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(BookExistException.class)
-    public final ResponseEntity<ExceptionResponse> handleBookExistException(BookExistException ex, WebRequest request) {
+    @ExceptionHandler(ExistException.class)
+    public final ResponseEntity<ExceptionResponse> handleExistException(ExistException ex, WebRequest request) {
         ExceptionResponse exceptionResponse = new ExceptionResponse(
                 new Date(), ex.getMessage(), request.getDescription(false));
 
@@ -37,22 +35,6 @@ public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExce
 
     @ExceptionHandler(BookStockException.class)
     public final ResponseEntity<ExceptionResponse> handleBookStockException(BookStockException ex, WebRequest request) {
-        ExceptionResponse exceptionResponse = new ExceptionResponse(
-                new Date(), ex.getMessage(), request.getDescription(false));
-
-        return new ResponseEntity<>(exceptionResponse, HttpStatus.NOT_FOUND);
-    }
-
-    @ExceptionHandler(BookNotFoundException.class)
-    public final ResponseEntity<ExceptionResponse> handleBookNotFoundException(BookNotFoundException ex, WebRequest request) {
-        ExceptionResponse exceptionResponse = new ExceptionResponse(
-                new Date(), ex.getMessage(), request.getDescription(false));
-
-        return new ResponseEntity<>(exceptionResponse, HttpStatus.NOT_FOUND);
-    }
-
-    @ExceptionHandler(RentBookException.class)
-    public final ResponseEntity<ExceptionResponse> handleRentBookException(RentBookException ex, WebRequest request) {
         ExceptionResponse exceptionResponse = new ExceptionResponse(
                 new Date(), ex.getMessage(), request.getDescription(false));
 

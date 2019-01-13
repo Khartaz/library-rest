@@ -6,9 +6,9 @@ import com.library.domain.RentBook;
 import com.library.domain.dto.BookDto;
 import com.library.domain.dto.ReaderDto;
 import com.library.exception.book.BookMessages;
-import com.library.exception.book.BookStockException;
+import com.library.exception.book.stock.BookStockException;
 import com.library.exception.reader.ReaderNotFoundException;
-import com.library.exception.rent.RentBookException;
+import com.library.exception.rent.RentBookNotFoundException;
 import com.library.mapper.ReaderMapper;
 import com.library.repository.ReaderRepository;
 import com.library.repository.RentBookRepository;
@@ -87,7 +87,7 @@ public class RentBookService {
         RentBook rentedBook = rentBookRepository.findRentBookByReaderIdAndBookIdAndReturnedIsFalse(readerId, bookId);
 
         if (rentedBook == null) {
-            throw new RentBookException(BookMessages.RENT_FIRST.getErrorMessage());
+            throw new RentBookNotFoundException(BookMessages.RENT_FIRST.getErrorMessage());
         }
 
         long booksInStock = rentedBook.getNumberOfBooks();

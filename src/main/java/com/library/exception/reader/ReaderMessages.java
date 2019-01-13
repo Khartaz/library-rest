@@ -2,7 +2,8 @@ package com.library.exception.reader;
 
 public enum  ReaderMessages {
 
-    READER_NOT_FOUND("Reader with provided id is not found");
+    READER_NOT_FOUND("Reader with provided id is not found"),
+    READER_EXIST("Reader with provided readerId already exist");
 
     private String errorMessage;
 
