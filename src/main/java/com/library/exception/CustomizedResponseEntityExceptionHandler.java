@@ -1,5 +1,6 @@
 package com.library.exception;
 
+import com.library.exception.book.BookExistException;
 import com.library.exception.book.BookNotFoundException;
 import com.library.exception.book.BookStockException;
 import com.library.exception.reader.ReaderNotFoundException;
@@ -26,6 +27,14 @@ public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExce
         return new ResponseEntity<>(exceptionResponse, HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(BookExistException.class)
+    public final ResponseEntity<ExceptionResponse> handleBookExistException(BookExistException ex, WebRequest request) {
+        ExceptionResponse exceptionResponse = new ExceptionResponse(
+                new Date(), ex.getMessage(), request.getDescription(false));
+
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler(BookStockException.class)
     public final ResponseEntity<ExceptionResponse> handleBookStockException(BookStockException ex, WebRequest request) {
         ExceptionResponse exceptionResponse = new ExceptionResponse(
@@ -34,16 +43,16 @@ public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExce
         return new ResponseEntity<>(exceptionResponse, HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(RentBookException.class)
-    public final ResponseEntity<ExceptionResponse> handleRentBookException(RentBookException ex, WebRequest request) {
+    @ExceptionHandler(BookNotFoundException.class)
+    public final ResponseEntity<ExceptionResponse> handleBookNotFoundException(BookNotFoundException ex, WebRequest request) {
         ExceptionResponse exceptionResponse = new ExceptionResponse(
                 new Date(), ex.getMessage(), request.getDescription(false));
 
         return new ResponseEntity<>(exceptionResponse, HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(BookNotFoundException.class)
-    public final ResponseEntity<ExceptionResponse> handleBookNotFoundException(BookNotFoundException ex, WebRequest request) {
+    @ExceptionHandler(RentBookException.class)
+    public final ResponseEntity<ExceptionResponse> handleRentBookException(RentBookException ex, WebRequest request) {
         ExceptionResponse exceptionResponse = new ExceptionResponse(
                 new Date(), ex.getMessage(), request.getDescription(false));
 

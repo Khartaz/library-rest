@@ -3,6 +3,7 @@ package com.library.service;
 import com.library.domain.Book;
 import com.library.domain.BookStock;
 import com.library.domain.dto.BookDto;
+import com.library.exception.book.BookExistException;
 import com.library.exception.book.BookMessages;
 import com.library.exception.book.BookNotFoundException;
 import com.library.exception.book.BookStockException;
@@ -37,7 +38,7 @@ public class BookService {
 
     public Book createBook(BookDto bookDto) {
         if (!checkBookId(bookDto.getBookId())) {
-            throw new BookNotFoundException(BookMessages.BOOK_NOT_FOUND.getErrorMessage());
+            throw new BookExistException(BookMessages.BOOK_EXIST.getErrorMessage());
         }
         String bookId = utils.generateId(8);
 
@@ -53,10 +54,13 @@ public class BookService {
         return bookRepository.save(mapper.mapToBook(bookDto, list));
     }
 
-    public Optional<Book> getBookByBookId(String bookId) {
-        Optional<Book> book = bookRepository.findBookByBookId(bookId);
-
-        if (!book.isPresent()) {
+    public Book getBookByBookId(String bookId) {
+        Optional<Book> optionalBook =bookRepository.findBookByBookId(bookId);
+        Book book = null;
+        if (optionalBook.isPresent()) {
+            book = optionalBook.orElse(null);
+        }
+        if (book == null) {
             throw new BookNotFoundException(BookMessages.BOOK_NOT_FOUND.getErrorMessage());
         }
         return book;
@@ -71,7 +75,7 @@ public class BookService {
     }
 
     public boolean deleteBook(BookDto bookDto) {
-        Book book = getBookByBookId(bookDto.getBookId()).get();
+        Book book = getBookByBookId(bookDto.getBookId());
 
         long id = book.getId();
         bookRepository.delete(id);
@@ -81,7 +85,7 @@ public class BookService {
 
     @SuppressWarnings("Duplicates")
     public BookDto addBookCopy(BookDto bookDto, long quantity) {
-        Book book = getBookByBookId(bookDto.getBookId()).get();
+        Book book = getBookByBookId(bookDto.getBookId());
 
         long booksTotal = book.getBookStock()
                 .stream()
@@ -108,7 +112,7 @@ public class BookService {
     }
 
     private BookDto removeBookCopy(BookDto bookDto, long quantity) {
-        Book book = getBookByBookId(bookDto.getBookId()).get();
+        Book book = getBookByBookId(bookDto.getBookId());
 
         long booksTotal = book.getBookStock()
                 .stream()
@@ -129,7 +133,7 @@ public class BookService {
 
     @SuppressWarnings("Duplicates")
     public BookDto markAsDestroyed(BookDto bookDto, long quantity) {
-        Book book = getBookByBookId(bookDto.getBookId()).get();
+        Book book = getBookByBookId(bookDto.getBookId());
 
         removeBookCopy(mapper.mapToBookDto(book), quantity);
 
@@ -158,7 +162,7 @@ public class BookService {
 
     @SuppressWarnings("Duplicates")
     public BookDto markAsLost(String bookId, long quantity) {
-        Book book = getBookByBookId(bookId).get();
+        Book book = getBookByBookId(bookId);
 
         removeBookCopy(mapper.mapToBookDto(book), quantity);
 
@@ -187,7 +191,7 @@ public class BookService {
 
     @SuppressWarnings("Duplicates")
     public Book markAsRented(BookDto bookDto, long quantity) {
-        Book book = getBookByBookId(bookDto.getBookId()).get();
+        Book book = getBookByBookId(bookDto.getBookId());
 
         long remainedBooks = book.getBookStock()
                 .stream()
@@ -213,7 +217,7 @@ public class BookService {
 
     @SuppressWarnings("Duplicates")
     public Book markAsReturn(String bookId, long quantity) {
-        Book book = getBookByBookId(bookId).get();
+        Book book = getBookByBookId(bookId);
 
         long remainedBooks = book.getBookStock()
                 .stream()

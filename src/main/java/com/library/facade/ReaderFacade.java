@@ -39,7 +39,7 @@ public class ReaderFacade {
     public ReaderDto rentBook(String bookId, String readerId, long quantity)  {
         ReaderDto readerDto = mapper.mapToReaderDto(readerService.getReaderByReaderId(readerId));
 
-        BookDto bookDto = bookMapper.mapToBookDto(bookService.getBookByBookId(bookId).get());
+        BookDto bookDto = bookMapper.mapToBookDto(bookService.getBookByBookId(bookId));
 
         return rentBookService.rentBook(bookDto, readerDto, quantity);
     }

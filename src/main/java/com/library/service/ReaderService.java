@@ -52,7 +52,10 @@ public class ReaderService {
         Optional<Reader> optionalReader = repository.findReaderByReaderId(readerId);
         Reader reader = null;
         if (optionalReader.isPresent()) {
-            reader = optionalReader.orElseThrow(new ReaderNotFoundException(ReaderMessages.READER_NOT_FOUND.getErrorMessage()));
+            reader = optionalReader.orElse(null);
+        }
+        if (reader == null) {
+            throw new ReaderNotFoundException(ReaderMessages.READER_NOT_FOUND.getErrorMessage());
         }
         return reader;
     }
@@ -61,7 +64,6 @@ public class ReaderService {
         Reader reader = getReaderByReaderId(readerDto.getReaderId());
 
         long id = reader.getId();
-
         repository.delete(id);
 
         return true;

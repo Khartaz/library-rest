@@ -26,7 +26,7 @@ public class BookFacade {
 
     public OperationStatus deleteBook(String bookId) {
         OperationStatus result = new OperationStatus();
-        BookDto bookDto = bookMapper.mapToBookDto(bookService.getBookByBookId(bookId).get());
+        BookDto bookDto = bookMapper.mapToBookDto(bookService.getBookByBookId(bookId));
 
         boolean status = bookService.deleteBook(bookDto);
 
@@ -38,24 +38,24 @@ public class BookFacade {
     }
 
     public BookDto addBooksToStock(String bookId, long quantity) {
-        BookDto result = bookMapper.mapToBookDto(bookService.getBookByBookId(bookId).get());
+        BookDto result = bookMapper.mapToBookDto(bookService.getBookByBookId(bookId));
 
         return bookService.addBookCopy(result, quantity);
     }
 
     public BookDto destroyedBook(String bookId, long quantity) {
-        BookDto result = bookMapper.mapToBookDto(bookService.getBookByBookId(bookId).get());
+        BookDto result = bookMapper.mapToBookDto(bookService.getBookByBookId(bookId));
 
         return bookService.markAsDestroyed(result, quantity);
     }
 
     public BookDto lostBook(String bookId, long quantity) {
-        BookDto bookDto = bookMapper.mapToBookDto(bookService.getBookByBookId(bookId).get());
+        BookDto bookDto = bookMapper.mapToBookDto(bookService.getBookByBookId(bookId));
         String result = bookDto.getBookId();
         return bookService.markAsLost(result, quantity);
     }
 
     public BookDto getBookByBookId(String bookId) {
-       return bookMapper.mapToBookDto(bookService.getBookByBookId(bookId).get());
+       return bookMapper.mapToBookDto(bookService.getBookByBookId(bookId));
     }
 }

@@ -6,19 +6,10 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import java.util.function.Supplier;
 
 @ResponseStatus(HttpStatus.NOT_FOUND)
-public class ReaderNotFoundException extends RuntimeException implements Supplier {
+public class ReaderNotFoundException extends RuntimeException {
 
     public ReaderNotFoundException(String exception) {
         super(exception);
     }
 
-    /**
-     * Gets a result.
-     *
-     * @return a result
-     */
-    @Override
-    public Object get() {
-        return null;
-    }
 }

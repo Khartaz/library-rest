@@ -7,7 +7,8 @@ public enum BookMessages {
     RENT_FIRST("Book with provided id is not rented yet."),
     BOOK_EXISTS("Book with provided id already exist."),
     STOCK_IS_EMPTY("Not enough books in stock with provided id."),
-    BOOK_NOT_FOUND("Book with provided id is not found.");
+    BOOK_NOT_FOUND("Book with provided id is not found."),
+    BOOK_EXIST("Book with provided bookId already exist");
 
     private String errorMessage;
 
