@@ -51,14 +51,7 @@ public class ReaderService {
 
     public Reader getReaderByReaderId(String readerId) {
         Optional<Reader> optionalReader = repository.findReaderByReaderId(readerId);
-        Reader reader = null;
-        if (optionalReader.isPresent()) {
-            reader = optionalReader.orElse(null);
-        }
-        if (reader == null) {
-            throw new ReaderNotFoundException(ReaderMessages.READER_NOT_FOUND.getErrorMessage());
-        }
-        return reader;
+        return optionalReader.orElseThrow(() -> new ReaderNotFoundException(ReaderMessages.READER_NOT_FOUND.getErrorMessage()));
     }
 
     public boolean deleteReader(ReaderDto readerDto) throws ReaderNotFoundException {
